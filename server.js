@@ -8,8 +8,8 @@ const PORT = process.env.PORT || 3001;
 
 app.use(express.static('public'));
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
 
 // GET request for notes
 app.get('/api/notes', (req, res) => {
@@ -62,16 +62,16 @@ app.post('/api/note', (req, res) => {
 });
 
 // // Below Not Used for Notes App
-// app.get('/', (req, res) => res.send('Navigate to /send or /routes'));
+app.get('/', (req, res) => res.send('Navigate to /send or /routes'));
 
-// app.get('/send', (req, res) =>
-//     res.sendFile(path.join(__dirname, 'public/sendFile.html'))
-// );
+app.get('/send', (req, res) =>
+    res.sendFile(path.join(__dirname, 'public/sendFile.html'))
+);
 
-// app.get('/routes', (req, res) =>
-//     res.sendFile(path.join(__dirname, 'public/routes.html'))
-// );
+app.get('/routes', (req, res) =>
+    res.sendFile(path.join(__dirname, 'public/routes.html'))
+);
 
-// app.listen(PORT, () =>
-//     console.log(`Example app listening at http://localhost:${PORT}`)
-// );
+app.listen(PORT, () =>
+    console.log(`Example app listening at http://localhost:${PORT}`)
+);
