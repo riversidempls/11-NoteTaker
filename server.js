@@ -12,7 +12,7 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-let rawdata = fs.readFileSync('/db/db.json');
+let rawdata = fs.readFileSync('./db/db.json');
 let notes = JSON.parse(rawdata);
 console.log(notes);
 
