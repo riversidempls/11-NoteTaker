@@ -3,13 +3,18 @@ const path = require('path');
 const fs = require('fs');
 // Helper method for generating unique ids
 const uuid = require('uuid');
+const { raw } = require('express');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(express.static('public'));
 
-// app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+let rawdata = fs.readFileSync('/db/db.json');
+let notes = JSON.parse(rawdata);
+console.log(notes);
 
 // GET request for notes
 app.get('/api/notes', (req, res) => {
@@ -17,13 +22,13 @@ app.get('/api/notes', (req, res) => {
     res.json(`${req.method} request received to get notes`);
 
     // Log our request to the terminal
-    console.info(`${req.method} request received to get reviews`);
+    console.info(`${req.method} request received to get notes`);
 });
 
 // POST request to add a new note
-app.post('/api/note', (req, res) => {
+app.post('/api/notes', (req, res) => {
     // Log that a POST request was received
-    console.info(`${req.method} request received to add a review`);
+    console.info(`${req.method} request received to add a note`);
 
     // Destructuring assignment for the items in req.body
     const { title, text, id } = req.body;
