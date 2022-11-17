@@ -3,7 +3,6 @@ const path = require('path');
 const fs = require('fs');
 // Helper method for generating unique ids
 const uuid = require('uuid');
-const { raw } = require('express');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -18,6 +17,7 @@ console.log(notes);
 
 // creating html routes
 
+app.get('/', (req, res) => res.send('/public/index.html'));
 app.get('/notes', (req, res) => res.sendFile(path.join(__dirname, '/public/notes.html')));
 
 
@@ -30,7 +30,7 @@ app.get('/api/notes', (req, res) => {
     let notes = JSON.parse(rawdata);
     // console.log(notes);
     res.json(notes);
-    res.json(`${req.method} request received to get notes`);
+    // res.json(`${req.method} request received to get notes`);
 
     // Log our request to the terminal
     console.info(`${req.method} request received to get notes`);
@@ -42,24 +42,29 @@ app.post('/api/notes', (req, res) => {
     console.info(`${req.method} request received to add a note`);
 
     // Destructuring assignment for the items in req.body
-    const { title, text, id } = req.body;
+
+    const { title, text } = req.body;
+    console.log(req.body);
+    console.log(title);
+    console.log(text);
+
+    // Generate a UUID for the new note
+    const id = uuid.v4();
+    console.log(id);
+
 
     // If all the required properties are present
     if (title && text && id) {
-        // Variable for the object we will save
-        const newNote = {
-            title,
-            text,
-            id,
-        };
-
+        // conststruct a new note including the new UUID
+        const reqPlus = { title, text, id };
         // Convert the data to a string so we can save it
-        const noteString = JSON.stringify(newNote);
+        // const noteString = JSON.stringify(reqPlus);
 
-        // get the json file
+        // get the json file parse it into objects and then push in the
+        // newly constructed note including UUID
         let rawdata = fs.readFileSync('./db/db.json');
         let notes = JSON.parse(rawdata);
-        notes.push(newNote);
+        notes.push(reqPlus);
         var newNoteData = JSON.stringify(notes)
 
 
@@ -84,16 +89,12 @@ app.post('/api/notes', (req, res) => {
     }
 });
 
-// // Below Not Used for Notes App
-// app.get('/', (req, res) => res.send('Navigate to /send or /routes'));
+// Create a route for deleting notes
+app.delete('/api/notes', (req, res) => {
+    console.info(`${req.method} request received to remove a note`);
+});
 
-// app.get('/send', (req, res) =>
-//     res.sendFile(path.join(__dirname, 'public/sendFile.html'))
-// );
 
-// app.get('/routes', (req, res) =>
-//     res.sendFile(path.join(__dirname, 'public/routes.html'))
-// );
 
 app.listen(PORT, () =>
     console.log(`Example app listening at http://localhost:${PORT}`)
