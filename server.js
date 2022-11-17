@@ -73,13 +73,13 @@ app.post('/api/notes', (req, res) => {
             err
                 ? console.error(err)
                 : console.log(
-                    `Note for ${newNote.title} has been written to JSON file`
+                    `Note for ${reqPlus.title} has been written to JSON file`
                 )
         );
 
         const response = {
             status: 'success',
-            body: newNote,
+            body: reqPlus,
         };
 
         console.log(response);
