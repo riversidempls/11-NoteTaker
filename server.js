@@ -15,6 +15,19 @@ let rawdata = fs.readFileSync('./db/db.json');
 let notes = JSON.parse(rawdata);
 console.log(notes);
 
+// Before creating a delete route, create an object from the URL Parameter
+app.param('id', function (request, response, next, id) {
+    // Do something with id
+    console.log(id)
+    // Store id or other info in req object
+    // Call next when done
+    next();
+});
+
+
+
+
+
 // creating html routes
 
 app.get('/', (req, res) => res.send('/public/index.html'));
@@ -89,9 +102,57 @@ app.post('/api/notes', (req, res) => {
     }
 });
 
+
+
+
+
+
 // Create a route for deleting notes
-app.delete('/api/notes', (req, res) => {
+app.delete('/api/notes/:id', (req, res) => {
     console.info(`${req.method} request received to remove a note`);
+
+    // Before deleting note, we create an object from the URL Parameter
+    app.param('id', function (request, response, next, id) {
+        // Do something with id
+        console.log(id)
+        // Fiter this id out of JSON like SO!
+        // get the json file parse it into objects 
+        let rawdata = fs.readFileSync('./db/db.json');
+        let notes = JSON.parse(rawdata);
+
+
+        // filter the parsed json where NOT equal to the id paramater
+        const filteredJson = notes.filter(item => item.id != id);
+
+        var newNoteData = JSON.stringify(filteredJson)
+
+        // Write the filtered notes back to the db.json file
+        fs.writeFile(`./db/db.json`, newNoteData, (err) =>
+            err
+                ? console.error(err)
+                : console.log(
+                    `A note has been removed from JSON file`
+                )
+        );
+
+        const result = {
+            status: 'success',
+            body: req.body,
+        };
+
+        console.log(`The delete was ${result}`);
+        res.status(201).json(result);
+
+
+        // Call next when done
+        next();
+    });
+
+
+
+
+
+
 });
 
 
