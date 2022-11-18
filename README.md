@@ -22,6 +22,3 @@ https://maple-snarl-1115.herokuapp.com/
 ## Screenshot
 ![Screenshot of website](./public/assets/screenshot.png)
 
-## Link to Screencastify Recording of Demo
-Check it out! --> [Google Drive Link](https://drive.google.com/file/d/1iNoh9ri2cAcg8JXLb2-xXOsqtyVuQLZV/view).
-
